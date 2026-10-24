@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="data:," />
+<title>Онлайн-запись — демо-шаблон для салонов и парикмахерских</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --orange:#f96d00; --orange-dark:#e05e00; --orange-soft:#fff3e6; --orange-softer:#fff8f1;
+    --ink:#262019; --muted:#7d7264; --line:#efe6da; --line-strong:#e6d9c8;
+    --bg:#fffaf5; --card:#ffffff; --ok:#178a50; --ok-bg:#e7f6ee; --bad:#d93636; --bad-bg:#fdeeee;
+    --wait:#b26a00; --wait-bg:#fff3d6; --radius:16px;
+    --shadow:0 10px 30px rgba(249,109,0,.10), 0 2px 8px rgba(38,32,25,.05);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer}
+  input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
+  a{color:var(--orange-dark)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+
+  /* Top bar */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar-in{display:flex;align-items:center;gap:14px;padding:10px 0;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .brand-mark{width:40px;height:40px;border-radius:12px;background:var(--orange);display:flex;align-items:center;justify-content:center;flex:none}
+  .brand-mark svg{width:22px;height:22px;stroke:#fff}
+  .brand-name{font-weight:800;font-size:17px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand-sub{font-size:12px;color:var(--muted)}
+  .nav{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+  .nav-btn{border:1px solid transparent;background:transparent;padding:9px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--ink);position:relative}
+  .nav-btn:hover{background:var(--orange-soft)}
+  .nav-btn.active{background:var(--orange);color:#fff}
+  .nav-btn .badge{position:absolute;top:-5px;right:-5px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;min-width:19px;height:19px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+  .nav-btn.active .badge{background:var(--ink)}
+  .demo-strip{background:var(--ink);color:#ffe9d2;font-size:13px;text-align:center;padding:7px 12px}
+  .demo-strip b{color:#ffb37a}
+
+  /* Hero */
+  .hero{padding:34px 0 8px}
+  .hero h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 10px;font-weight:800;letter-spacing:-.01em}
+  .hero h1 .hl{color:var(--orange)}
+  .hero p.lead{font-size:17px;color:var(--muted);max-width:640px;margin:0 0 18px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13.5px;font-weight:500}
+  .chip svg{width:15px;height:15px;stroke:var(--orange);flex:none}
+  .hero-cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:12px;padding:13px 22px;font-weight:700;font-size:15px;background:var(--orange);color:#fff;transition:background .15s, transform .1s}
+  .btn:hover{background:var(--orange-dark)}
+  .btn:active{transform:scale(.98)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line-strong)}
+  .btn.ghost:hover{border-color:var(--orange);color:var(--orange-dark);background:var(--orange-softer)}
+  .btn.small{padding:9px 15px;font-size:14px;border-radius:10px}
+  .btn.ok{background:var(--ok)} .btn.ok:hover{background:#11703f}
+  .btn.danger{background:#fff;color:var(--bad);border:1.5px solid #f3c2c2}
+  .btn.danger:hover{background:var(--bad-bg)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .hero-note{font-size:13px;color:var(--muted)}
+
+  section.block{padding:26px 0}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .sec-head h2{font-size:24px;margin:0;font-weight:800}
+  .sec-head p{margin:0;color:var(--muted);font-size:14px}
+
+  /* Booking wizard */
+  .booking-card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:22px}
+  .steps{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .step-pill{display:flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:var(--orange-softer);border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--muted)}
+  .step-pill .n{width:22px;height:22px;border-radius:50%;background:#e9ded0;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+  .step-pill.on{color:var(--orange-dark);border-color:#ffd9b8;background:var(--orange-soft)}
+  .step-pill.on .n{background:var(--orange);color:#fff}
+  .step-pill.done{color:var(--ok)} .step-pill.done .n{background:var(--ok);color:#fff}
+  .step-title{font-weight:800;font-size:17px;margin:18px 0 10px}
+  .step-title:first-of-type{margin-top:0}
+
+  .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+  .svc{border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;background:#fff;text-align:left;width:100%;transition:border-color .12s, background .12s}
+  .svc:hover{border-color:#ffc79b}
+  .svc.sel{border-color:var(--orange);background:var(--orange-softer)}
+  .svc-name{font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+  .svc-price{color:var(--orange-dark);font-weight:800;white-space:nowrap}
+  .svc-meta{font-size:13px;color:var(--muted);margin-top:3px}
+
+  .master-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+  .mcard{border:1.5px solid var(--line);border-radius:14px;padding:13px;background:#fff;text-align:left;width:100%;display:flex;gap:12px;align-items:center;transition:border-color .12s, background .12s}
+  .mcard:hover{border-color:#ffc79b}
+  .mcard.sel{border-color:var(--orange);background:var(--orange-softer)}
+  .mcard.off{opacity:.5}
+  .avatar{width:48px;height:48px;border-radius:50%;background:var(--orange-soft);color:var(--orange-dark);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex:none;border:2px solid #ffd9b8}
+  .mcard-name{font-weight:700;font-size:15px;line-height:1.25}
+  .mcard-role{font-size:12.5px;color:var(--muted)}
+  .mcard-rate{font-size:12.5px;color:var(--wait);font-weight:700}
+
+  .date-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+  .date-btn{flex:none;width:64px;padding:9px 0 7px;border-radius:12px;border:1.5px solid var(--line);background:#fff;text-align:center}
+  .date-btn:hover{border-color:#ffc79b}
+  .date-btn.sel{border-color:var(--orange);background:var(--orange);color:#fff}
+  .date-btn.off{opacity:.38;pointer-events:none}
+  .date-btn .dow{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;opacity:.75;font-weight:700}
+  .date-btn .dnum{font-size:19px;font-weight:800;line-height:1.15}
+  .date-btn .dmon{font-size:11.5px;opacity:.8}
+  .slot-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 15px;font-weight:700;font-size:14.5px}
+  .slot:hover{border-color:var(--orange)}
+  .slot.sel{background:var(--orange);border-color:var(--orange);color:#fff}
+  .slot.busy{opacity:.35;text-decoration:line-through;pointer-events:none}
+  .slot-empty{color:var(--muted);font-size:14px;padding:8px 0}
+
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+  .field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line-strong);border-radius:11px;padding:11px 13px;background:#fff;outline:none}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--orange)}
+  .field .hint{font-size:12px;color:var(--muted);margin-top:4px}
+  .field.full{grid-column:1/-1}
+  .summary{background:var(--orange-softer);border:1px dashed #ffc79b;border-radius:14px;padding:14px 16px;font-size:14.5px;margin:16px 0}
+  .summary b{color:var(--orange-dark)}
+  .err{background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:10px 13px;font-size:14px;font-weight:600;margin-top:12px;display:none}
+  .success-box{text-align:center;padding:18px 8px 6px}
+  .success-ico{width:64px;height:64px;border-radius:50%;background:var(--wait-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  .success-ico svg{width:32px;height:32px;stroke:var(--wait)}
+  .success-box h3{margin:0 0 8px;font-size:21px}
+  .success-box p{color:var(--muted);max-width:480px;margin:0 auto 8px}
+  .code-chip{display:inline-block;background:var(--ink);color:#fff;font-weight:800;letter-spacing:.06em;border-radius:9px;padding:6px 14px;margin:8px 0 16px}
+
+  /* Status chips */
+  .st{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;border-radius:999px;padding:4px 11px;white-space:nowrap}
+  .st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+  .st-pending{background:var(--wait-bg);color:var(--wait)}
+  .st-confirmed{background:var(--ok-bg);color:var(--ok)}
+  .st-rejected,.st-cancelled{background:var(--bad-bg);color:var(--bad)}
+  .st-completed{background:#eceae6;color:#6b655c}
+
+  /* Price list & masters sections */
+  .price-list{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .price-row{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .price-row:last-child{border-bottom:none}
+  .price-row .grow{flex:1;min-width:0}
+  .price-row .nm{font-weight:700}
+  .price-row .ds{font-size:13px;color:var(--muted)}
+  .price-row .pr{font-weight:800;color:var(--orange-dark);white-space:nowrap}
+  .price-row .dur{font-size:13px;color:var(--muted);white-space:nowrap}
+  .masters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .master-public{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+  .master-public .avatar{width:58px;height:58px;font-size:19px}
+  .master-public h3{margin:10px 0 2px;font-size:17px}
+  .master-public .role{color:var(--orange-dark);font-weight:700;font-size:13.5px}
+  .master-public .bio{font-size:13.5px;color:var(--muted);margin:8px 0 12px;min-height:40px}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tag{font-size:12px;background:var(--orange-softer);border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--muted);font-weight:600}
+
+  /* Booking cards (master/admin/my) */
+  .bk{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+  .bk-head{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+  .bk-main{flex:1;min-width:200px}
+  .bk-title{font-weight:800;font-size:16px}
+  .bk-sub{font-size:13.5px;color:var(--muted)}
+  .bk-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  .bk-note{font-size:13px;background:var(--orange-softer);border-radius:9px;padding:8px 11px;margin-top:10px;color:var(--muted)}
+  .bk-note b{color:var(--ink)}
+  .reject-row{display:none;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+  .reject-row.open{display:flex}
+  .reject-row select{border:1.5px solid var(--line-strong);border-radius:10px;padding:9px 11px;background:#fff}
+  .empty{background:#fff;border:1.5px dashed var(--line-strong);border-radius:16px;padding:28px 18px;text-align:center;color:var(--muted)}
+  .empty .big{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:4px}
+
+  /* Master cabinet */
+  .picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .picker-btn{display:flex;align-items:center;gap:9px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 15px 7px 8px;font-weight:700;font-size:14.5px}
+  .picker-btn .avatar{width:34px;height:34px;font-size:13px}
+  .picker-btn.sel{border-color:var(--orange);background:var(--orange-softer)}
+  .picker-btn .cnt{background:var(--bad);color:#fff;font-size:11.5px;font-weight:800;border-radius:999px;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media(max-width:860px){.cols{grid-template-columns:1fr}}
+  .col-head{display:flex;align-items:center;gap:9px;margin:4px 0 12px}
+  .col-head h3{margin:0;font-size:18px;font-weight:800}
+  .col-head .cnt{background:var(--orange);color:#fff;font-size:12px;font-weight:800;border-radius:999px;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;padding:0 7px}
+  .profile-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .profile-card .avatar{width:64px;height:64px;font-size:21px}
+  .switch-row{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px}
+  .switch{width:52px;height:29px;border-radius:999px;background:#ddd2c4;border:none;position:relative;flex:none;transition:background .15s}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+  .switch.on{background:var(--ok)} .switch.on::after{left:26px}
+
+  /* Admin */
+  .admin-nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+  .admin-nav button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px}
+  .admin-nav button.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+  .stat .v{font-size:28px;font-weight:800;line-height:1.1}
+  .stat .l{font-size:13px;color:var(--muted);font-weight:600}
+  .stat.accent{background:var(--orange);border-color:var(--orange);color:#fff}
+  .stat.accent .l{color:#ffe3cb}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px}
+  .panel h3{margin:0 0 6px;font-size:18px;font-weight:800}
+  .panel .desc{font-size:13.5px;color:var(--muted);margin:0 0 16px}
+  .pill-toggle{display:inline-flex;border:1.5px solid var(--line-strong);background:#fff;border-radius:999px;padding:7px 13px;font-size:13.5px;font-weight:600;margin:0 6px 6px 0}
+  .pill-toggle.sel{background:var(--orange);border-color:var(--orange);color:#fff}
+  .row-item{display:flex;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .row-item:last-child{border-bottom:none}
+  .row-item .grow{flex:1;min-width:180px}
+  .icon-btn{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font-weight:700;font-size:13.5px}
+  .icon-btn:hover{border-color:var(--orange)}
+  .icon-btn.del{color:var(--bad);border-color:#f3c2c2}
+  .icon-btn.del:hover{background:var(--bad-bg)}
+  .rule-box{background:var(--wait-bg);border:1px solid #f0d9a0;border-radius:14px;padding:14px 16px;font-size:14px;margin-bottom:18px}
+  .rule-box b{color:#8a5600}
+  .filter-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .filter-row button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13.5px}
+  .filter-row button.sel{background:var(--orange);border-color:var(--orange);color:#fff}
+
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:13px 20px;border-radius:13px;font-weight:600;font-size:14.5px;box-shadow:0 12px 32px rgba(0,0,0,.25);z-index:100;transition:transform .3s;max-width:92vw;text-align:center}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast .t-orange{color:#ffb37a}
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:26px 0 40px;background:#fff}
+  footer .cols-f{display:flex;gap:26px;flex-wrap:wrap}
+  footer h4{margin:0 0 8px;font-size:15px}
+  footer p,footer a{font-size:14px;color:var(--muted);margin:0 0 5px;display:block;text-decoration:none}
+  footer a:hover{color:var(--orange-dark)}
+  .view{display:none}.view.active{display:block}
+  .admin-page{display:none}.admin-page.active{display:block}
+  .mt{margin-top:14px}.small-note{font-size:12.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="demo-strip">Это <b>демо-шаблон</b> для одного бизнеса: название, мастера и услуги ниже — пример заполнения. Администратор меняет всё под свой салон в разделе «Админ».</div>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 8.5 20 20M8.5 15.5 20 4"/></svg></div>
+      <div>
+        <div class="brand-name" id="brandName">Парикмахерская «Стиль»</div>
+        <div class="brand-sub">онлайн-запись</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="client">Записаться</button>
+      <button class="nav-btn" data-view="my">Мои записи</button>
+      <button class="nav-btn" data-view="master">Кабинет мастера<span class="badge" id="masterBadge" style="display:none">0</span></button>
+      <button class="nav-btn" data-view="admin">Админ</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ======================= CLIENT VIEW ======================= -->
+  <div class="view active" id="view-client">
+    <div class="hero">
+      <h1 id="heroTitle">Парикмахерская «Стиль» — <span class="hl">запись онлайн</span> за минуту</h1>
+      <p class="lead" id="heroLead">Выберите услугу и мастера, удобный день и время — мастер лично подтвердит вашу запись, и вы получите статус сразу на этой странице.</p>
+      <div class="chips">
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span id="chipAddress">г. Челябинск, ул. Советская, 10</span></span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="chipHours">Ежедневно 09:00–20:00</span></span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span id="chipPhone">+7 (351) 200-10-20</span></span>
+      </div>
+      <div class="hero-cta">
+        <button class="btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Записаться онлайн</button>
+        <span class="hero-note">Без предоплаты · подтверждение — лично мастером</span>
+      </div>
+    </div>
+
+    <section class="block" id="booking">
+      <div class="sec-head"><h2>Онлайн-запись</h2><p>4 шага — и заявка уйдёт мастеру на подтверждение</p></div>
+      <div class="booking-card" id="bookingCard">
+        <div class="steps">
+          <span class="step-pill on" id="pill1"><span class="n">1</span>Услуга</span>
+          <span class="step-pill" id="pill2"><span class="n">2</span>Мастер</span>
+          <span class="step-pill" id="pill3"><span class="n">3</span>Дата и время</span>
+          <span class="step-pill" id="pill4"><span class="n">4</span>Ваши данные</span>
+        </div>
+
+        <div id="bookForm">
+          <div class="step-title">1 · Выберите услугу</div>
+          <div class="svc-grid" id="svcGrid"></div>
+
+          <div class="step-title">2 · Выберите мастера</div>
+          <div class="master-row" id="masterRow"></div>
+          <p class="small-note" id="masterHint"></p>
+
+          <div class="step-title">3 · Дата и время</div>
+          <div class="date-strip" id="dateStrip"></div>
+          <div class="slot-grid" id="slotGrid"></div>
+
+          <div class="step-title">4 · Ваши данные</div>
+          <div class="form-grid">
+            <div class="field"><label for="cName">Ваше имя *</label><input id="cName" type="text" placeholder="Например, Екатерина" autocomplete="name" /></div>
+            <div class="field"><label for="cPhone">Телефон *</label><input id="cPhone" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel" /><div class="hint">По нему мастер подтвердит запись, а вы сможете найти её в «Мои записи»</div></div>
+            <div class="field full"><label for="cComment">Комментарий мастеру (необязательно)</label><textarea id="cComment" rows="2" placeholder="Пожелания, особенности, ссылки на фото примера…"></textarea></div>
+          </div>
+
+          <div class="summary" id="bookSummary">Выберите услугу, мастера, дату и время — здесь появится итог записи.</div>
+          <button class="btn" id="submitBooking" style="width:100%">Отправить заявку мастеру</button>
+          <div class="err" id="bookErr"></div>
+          <p class="small-note mt">Нажимая кнопку, вы отправляете заявку выбранному мастеру. Запись считается подтверждённой только после его ответа — статус смотрите во вкладке «Мои записи» по номеру телефона.</p>
+        </div>
+
+        <div id="bookSuccess" style="display:none">
+          <div class="success-box">
+            <div class="success-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+            <h3>Заявка отправлена мастеру</h3>
+            <p id="successText"></p>
+            <div class="code-chip" id="successCode"></div>
+            <p>Статус: <span class="st st-pending">Ожидает подтверждения мастера</span></p>
+            <p>Мастеру ушло уведомление. Как только он подтвердит или отклонит запись, статус обновится во вкладке «Мои записи».</p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+              <button class="btn" onclick="showView('my')">Смотреть мои записи</button>
+              <button class="btn ghost" onclick="resetBooking()">Новая запись</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="sec-head"><h2>Услуги и цены</h2><p>Актуальный прайс салона</p></div>
+      <div class="price-list" id="priceList"></div>
+    </section>
+
+    <section class="block">
+      <div class="sec-head"><h2>Наши мастера</h2><p>Каждый мастер сам подтверждает записи к себе</p></div>
+      <div class="masters-grid" id="mastersPublic"></div>
+    </section>
+  </div>
+
+  <!-- ======================= MY BOOKINGS ======================= -->
+  <div class="view" id="view-my">
+    <section class="block">
+      <div class="sec-head"><h2>Мои записи</h2><p>Введите телефон, указанный при записи</p></div>
+      <div class="panel" style="max-width:560px">
+        <div class="field"><label for="myPhone">Номер телефона</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="myPhone" type="tel" placeholder="+7 (___) ___-__-__" style="flex:1;min-width:200px" /><button class="btn" onclick="findMyBookings()">Найти</button></div>
+          <div class="hint">В демо попробуйте телефон из тестовых записей: +7 (900) 111-22-33</div>
+        </div>
+      </div>
+      <div id="myResults" style="max-width:760px"></div>
+    </section>
+  </div>
+
+  <!-- ======================= MASTER CABINET ======================= -->
+  <div class="view" id="view-master">
+    <section class="block">
+      <div class="sec-head"><h2>Кабинет мастера</h2><p>Только мастер подтверждает или отклоняет записи к себе — администратор этого сделать не может</p></div>
+      <div class="picker" id="masterPicker"></div>
+      <div id="masterCabinet"></div>
+    </section>
+  </div>
+
+  <!-- ======================= ADMIN ======================= -->
+  <div class="view" id="view-admin">
+    <section class="block">
+      <div class="sec-head"><h2>Панель администратора</h2><p>Настройка сайта записи под конкретный бизнес</p></div>
+      <div class="rule-box"><b>Главное правило шаблона:</b> администратор настраивает бизнес, мастеров и услуги, но <b>подтвердить запись может только сам мастер</b>, к которому записались. У администратора в списке записей кнопки «Подтвердить» нет — только просмотр и отмена.</div>
+      <nav class="admin-nav" id="adminNav">
+        <button data-apage="dash" class="sel">Обзор</button>
+        <button data-apage="business">Бизнес и часы</button>
+        <button data-apage="masters">Мастера</button>
+        <button data-apage="services">Услуги</button>
+        <button data-apage="bookings">Все записи</button>
+        <button data-apage="rules">Правила записи</button>
+      </nav>
+
+      <div class="admin-page active" id="apage-dash">
+        <div class="stats" id="dashStats"></div>
+        <div class="cols">
+          <div>
+            <div class="col-head"><h3>Ждут подтверждения</h3><span class="cnt" id="dashPendingCnt">0</span></div>
+            <div id="dashPending"></div>
+          </div>
+          <div>
+            <div class="col-head"><h3>Ближайшие подтверждённые</h3></div>
+            <div id="dashUpcoming"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-page" id="apage-business">
+        <div class="panel">
+          <h3>Информация о бизнесе</h3>
+          <p class="desc">Показывается на главной странице сайта: в шапке, блоке контактов и карточках записи.</p>
+          <div class="form-grid">
+            <div class="field"><label>Название бизнеса</label><input id="bName" /></div>
+            <div class="field"><label>Слоган под названием</label><input id="bTagline" /></div>
+            <div class="field full"><label>Краткое описание</label><textarea id="bDesc" rows="2"></textarea></div>
+            <div class="field"><label>Адрес</label><input id="bAddress" /></div>
+            <div class="field"><label>Телефон</label><input id="bPhone" /></div>
+            <div class="field"><label>Telegram (ссылка или @ник)</label><input id="bTg" placeholder="https://t.me/…" /></div>
+            <div class="field"><label>ВКонтакте (ссылка)</label><input id="bVk" placeholder="https://vk.com/…" /></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Режим работы салона</h3>
+          <p class="desc">По этим часам строятся свободные окошки для записи у всех мастеров.</p>
+          <div class="form-grid">
+            <div class="field"><label>Открытие</label><input id="bFrom" type="time" /></div>
+            <div class="field"><label>Закрытие</label><input id="bTo" type="time" /></div>
+          </div>
+          <div class="field mt"><label>Выходные дни салона</label><div id="bDaysOff"></div></div>
+          <button class="btn mt" onclick="saveBusiness()">Сохранить и обновить сайт</button>
+        </div>
+      </div>
+
+      <div class="admin-page" id="apage-masters">
+        <div class="panel">
+          <h3 id="masterFormTitle">Добавить мастера</h3>
+          <p class="desc">Мастер появится на сайте сразу. У него будет свой кабинет, где он лично подтверждает записи к себе.</p>
+          <div class="form-grid">
+            <div class="field"><label>Имя и фамилия *</label><input id="mName" placeholder="Например, Анна Соколова" /></div>
+            <div class="field"><label>Специализация *</label><input id="mRole" placeholder="Парикмахер-стилист, барбер…" /></div>
+            <div class="field"><label>Опыт</label><input id="mExp" placeholder="Например, 8 лет" /></div>
+            <div class="field"><label>Рейтинг (для карточки)</label><input id="mRating" placeholder="4,9" /></div>
+            <div class="field full"><label>О мастере</label><textarea id="mBio" rows="2" placeholder="Пара слов для карточки на сайте"></textarea></div>
+            <div class="field full"><label>Какие услуги оказывает</label><div id="mServices"></div></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+            <button class="btn" id="masterSaveBtn" onclick="saveMaster()">Добавить мастера</button>
+            <button class="btn ghost" id="masterCancelBtn" style="display:none" onclick="cancelEditMaster()">Отменить редактирование</button>
+          </div>
+          <div class="err" id="masterErr"></div>
+        </div>
+        <div class="panel">
+          <h3>Мастера салона</h3>
+          <p class="desc">Отключённый мастер не показывается клиентам и не получает новых записей. При удалении его будущие неподтверждённые записи отменяются автоматически.</p>
+          <div id="adminMasters"></div>
+        </div>
+      </div>
+
+      <div class="admin-page" id="apage-services">
+        <div class="panel">
+          <h3 id="svcFormTitle">Добавить услугу</h3>
+          <p class="desc">Длительность влияет на расчёт свободных окошек: длинная услуга занимает несколько слотов подряд.</p>
+          <div class="form-grid">
+            <div class="field"><label>Название *</label><input id="sName" placeholder="Например, Женская стрижка" /></div>
+            <div class="field"><label>Категория</label><input id="sCat" placeholder="Стрижки, Окрашивание…" /></div>
+            <div class="field"><label>Длительность, минут *</label><input id="sDur" type="number" min="10" step="5" placeholder="60" /></div>
+            <div class="field"><label>Цена, ₽ *</label><input id="sPrice" type="number" min="0" step="50" placeholder="1500" /></div>
+            <div class="field full"><label>Описание</label><input id="sDesc" placeholder="Что входит в услугу" /></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+            <button class="btn" id="svcSaveBtn" onclick="saveService()">Добавить услугу</button>
+            <button class="btn ghost" id="svcCancelBtn" style="display:none" onclick="cancelEditService()">Отменить редактирование</button>
+          </div>
+          <div class="err" id="svcErr"></div>
+        </div>
+        <div class="panel">
+          <h3>Все услуги</h3>
+          <div id="adminServices"></div>
+        </div>
+      </div>
+
+      <div class="admin-page" id="apage-bookings">
+        <div class="panel">
+          <h3>Все записи</h3>
+          <p class="desc">Администратор видит всё, но подтвердить или отклонить может только мастер — из своего кабинета.</p>
+          <div class="filter-row" id="bkFilters">
+            <button data-f="all" class="sel">Все</button>
+            <button data-f="pending">Ожидают мастера</button>
+            <button data-f="confirmed">Подтверждены</button>
+            <button data-f="completed">Завершены</button>
+            <button data-f="rejected">Отклонены</button>
+            <button data-f="cancelled">Отменены</button>
+          </div>
+          <div id="adminBookings"></div>
+        </div>
+      </div>
+
+      <div class="admin-page" id="apage-rules">
+        <div class="panel">
+          <h3>Правила онлайн-записи</h3>
+          <p class="desc">Эти параметры меняют форму записи для клиентов сразу после сохранения.</p>
+          <div class="form-grid">
+            <div class="field"><label>Шаг окошек, минут</label>
+              <select id="rStep"><option value="15">15 минут</option><option value="30">30 минут</option><option value="45">45 минут</option><option value="60">60 минут</option></select>
+              <div class="hint">Как часто начинаются приёмы в расписании</div></div>
+            <div class="field"><label>Запись открыта на … дней вперёд</label>
+              <select id="rHorizon"><option value="7">7 дней</option><option value="14">14 дней</option><option value="21">21 день</option><option value="30">30 дней</option></select></div>
+            <div class="field"><label>Самая ранняя запись — за … до приёма</label>
+              <select id="rLead"><option value="0">Можно прямо сейчас</option><option value="1">Минимум за 1 час</option><option value="2">Минимум за 2 часа</option><option value="4">Минимум за 4 часа</option><option value="24">Минимум за сутки</option></select></div>
+            <div class="field"><label>Напоминание клиенту</label>
+              <select id="rRemind"><option value="0">Не отправлять</option><option value="2">За 2 часа</option><option value="4">За 4 часа</option><option value="24">За сутки</option></select>
+              <div class="hint">В боевой версии уходит в SMS / мессенджер</div></div>
+          </div>
+          <div class="field mt"><label>Подтверждение записи</label>
+            <div class="rule-box" style="margin:0"><b>Всегда вручную мастером.</b> Каждая заявка сначала попадает мастеру в кабинет со статусом «Ожидает подтверждения». Автоподтверждение в шаблоне отключено намеренно — так бизнес просил.</div>
+          </div>
+          <button class="btn mt" onclick="saveRules()">Сохранить правила</button>
+        </div>
+        <div class="panel">
+          <h3>Как устроен шаблон для нового бизнеса</h3>
+          <p class="desc" style="margin-bottom:0">Для каждого салона разворачивается <b>отдельная копия</b> этого сайта со своим названием, мастерами и услугами — это не общий каталог. Порядок запуска: 1) администратор заполняет блок «Бизнес и часы»; 2) добавляет мастеров и отмечает их услуги; 3) настраивает прайс; 4) проверяет правила записи; 5) делится ссылкой с клиентами. Мастера заходят в «Кабинет мастера» под своим именем и подтверждают записи.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap cols-f">
+    <div style="flex:1;min-width:220px">
+      <h4 id="footName">Парикмахерская «Стиль»</h4>
+      <p id="footDesc">Стрижки, окрашивание и укладки в центре города.</p>
+    </div>
+    <div style="min-width:180px">
+      <h4>Контакты</h4>
+      <p id="footAddress">г. Челябинск, ул. Советская, 10</p>
+      <p id="footPhone">+7 (351) 200-10-20</p>
+      <p id="footHours">Ежедневно 09:00–20:00</p>
+    </div>
+    <div style="min-width:160px">
+      <h4>Мы на связи</h4>
+      <a href="#" id="footTg">Telegram</a>
+      <a href="#" id="footVk">ВКонтакте</a>
+      <a href="#booking" onclick="showView('client')">Онлайн-запись</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================== STATE (демо-данные примера) ==================== */
+function dOffset(days, time){ var d=new Date(); d.setDate(d.getDate()+days); var p=time.split(':'); d.setHours(+p[0],+p[1],0,0); return d; }
+function isoOf(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+
+var state = {
+  business: {
+    name: 'Парикмахерская «Стиль»', tagline: 'Стрижки и окрашивание в центре города',
+    desc: 'Уютная парикмахерская: женские и мужские стрижки, окрашивание любой сложности, укладки. Запись онлайн — мастер лично подтверждает каждое время.',
+    address: 'г. Челябинск, ул. Советская, 10', phone: '+7 (351) 200-10-20',
+    tg: 'https://t.me/', vk: 'https://vk.com/',
+    workFrom: '09:00', workTo: '20:00', daysOff: [0]
+  },
+  rules: { step: 30, horizon: 14, leadHours: 1, remind: 4 },
+  services: [
+    { id:'s1', name:'Женская стрижка', cat:'Стрижки', dur:60, price:1500, desc:'Мытьё, стрижка, укладка по форме' },
+    { id:'s2', name:'Мужская стрижка', cat:'Стрижки', dur:45, price:900, desc:'Стрижка машинкой и ножницами, стайлинг' },
+    { id:'s3', name:'Стрижка + оформление бороды', cat:'Барберинг', dur:75, price:1400, desc:'Стрижка, борода, горячее полотенце' },
+    { id:'s4', name:'Окрашивание в один тон', cat:'Окрашивание', dur:120, price:4500, desc:'Краситель премиум-класса, уход включён' },
+    { id:'s5', name:'Мелирование', cat:'Окрашивание', dur:150, price:5200, desc:'Фольга, тонирование, уход' },
+    { id:'s6', name:'Вечерняя укладка', cat:'Укладки', dur:40, price:1200, desc:'Локоны или гладкая укладка на выход' },
+    { id:'s7', name:'Детская стрижка (до 12 лет)', cat:'Стрижки', dur:40, price:800, desc:'Спокойно и без слёз, мультики в кресле' }
+  ],
+  masters: [
+    { id:'m1', name:'Анна Соколова', role:'Парикмахер-стилист, колорист', exp:'8 лет опыта', rating:'4,9', bio:'Сложные окрашивания и женские стрижки. Подберёт цвет под тон кожи и образ жизни.', services:['s1','s4','s5','s6','s7'], active:true, accepting:true },
+    { id:'m2', name:'Дмитрий Волков', role:'Барбер', exp:'6 лет опыта', rating:'5,0', bio:'Классические и современные мужские стрижки, оформление бороды опасной бритвой.', services:['s2','s3'], active:true, accepting:true },
+    { id:'m3', name:'Ольга Миронова', role:'Парикмахер-универсал', exp:'11 лет опыта', rating:'4,8', bio:'Семейный мастер: стрижки для взрослых и детей, аккуратные укладки на каждый день.', services:['s1','s2','s6','s7'], active:true, accepting:true },
+    { id:'m4', name:'Игорь Ковалёв', role:'Барбер', exp:'4 года опыта', rating:'4,9', bio:'Фейды, кропы и креативные стрижки. Работает быстро и точно по фото-примерам.', services:['s2','s3'], active:true, accepting:true }
+  ],
+  bookings: [],
+  seq: 1040
+};
+function seedBookings(){
+  var t = isoOf(new Date());
+  var tm = isoOf(dOffset(1,'0:00'));
+  var t2 = isoOf(dOffset(2,'0:00'));
+  var yd = isoOf(dOffset(-1,'0:00'));
+  state.bookings = [
+    { id:'BK-1041', client:'Екатерина', phone:'+7 (900) 111-22-33', serviceId:'s1', masterId:'m1', date:tm, time:'11:00', comment:'Хочу освежить каре, как в прошлый раз', status:'pending', created:'сегодня, 09:12', note:'' },
+    { id:'BK-1042', client:'Марина', phone:'+7 (900) 111-22-33', serviceId:'s5', masterId:'m1', date:tm, time:'14:00', comment:'Мелирование, волосы до плеч', status:'pending', created:'сегодня, 09:40', note:'' },
+    { id:'BK-1043', client:'Артём', phone:'+7 (922) 555-01-02', serviceId:'s3', masterId:'m2', date:t, time:'17:30', comment:'', status:'pending', created:'сегодня, 08:05', note:'' },
+    { id:'BK-1044', client:'Сергей', phone:'+7 (922) 555-01-02', serviceId:'s2', masterId:'m2', date:t2, time:'12:00', comment:'Фейд по бокам', status:'confirmed', created:'вчера, 18:20', note:'' },
+    { id:'BK-1045', client:'Наталья', phone:'+7 (900) 111-22-33', serviceId:'s6', masterId:'m3', date:t2, time:'16:00', comment:'Укладка на юбилей', status:'confirmed', created:'вчера, 12:44', note:'' },
+    { id:'BK-1046', client:'Олег', phone:'+7 (922) 555-01-02', serviceId:'s2', masterId:'m4', date:yd, time:'13:00', comment:'', status:'completed', created:'позавчера, 10:02', note:'' }
+  ];
+}
+seedBookings();
+
+/* ==================== HELPERS ==================== */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function svc(id){ return state.services.find(function(s){return s.id===id;}); }
+function mst(id){ return state.masters.find(function(m){return m.id===id;}); }
+function initials(name){ return name.split(/\s+/).map(function(w){return w[0];}).slice(0,2).join('').toUpperCase(); }
+function digits(p){ return String(p||'').replace(/\D/g,''); }
+function money(n){ return Number(n).toLocaleString('ru-RU')+' ₽'; }
+function toMin(t){ var p=t.split(':'); return (+p[0])*60+(+p[1]); }
+function toTime(min){ return String(Math.floor(min/60)).padStart(2,'0')+':'+String(min%60).padStart(2,'0'); }
+var MONTHS=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+var MONTHS_S=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+var DOWS=['вс','пн','вт','ср','чт','пт','сб'];
+function fmtDate(iso){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); var today=isoOf(new Date()); var tom=isoOf(dOffset(1,'0:00')); var lbl=(iso===today?'Сегодня':iso===tom?'Завтра':DOWS[d.getDay()]); return lbl+', '+d.getDate()+' '+MONTHS[d.getMonth()]; }
+var ST={ pending:{t:'Ожидает подтверждения мастера',c:'st-pending'}, confirmed:{t:'Подтверждена мастером',c:'st-confirmed'}, rejected:{t:'Отклонена мастером',c:'st-rejected'}, cancelled:{t:'Отменена',c:'st-cancelled'}, completed:{t:'Завершена',c:'st-completed'} };
+function stChip(s){ var x=ST[s]; return '<span class="st '+x.c+'">'+x.t+'</span>'; }
+var toastTimer=null;
+function toast(html){ var t=$('toast'); t.innerHTML=html; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove('show');},3600); }
+function hoursLabel(){ var off=state.business.daysOff; if(!off.length) return 'Ежедневно '+state.business.workFrom+'–'+state.business.workTo; var names=['вс','пн','вт','ср','чт','пт','сб']; return state.business.workFrom+'–'+state.business.workTo+', выходной: '+off.map(function(d){return names[d];}).join(', '); }
+
+function slotBlocked(masterId, dateIso, startMin, dur){
+  return state.bookings.some(function(b){
+    if(b.masterId!==masterId || b.date!==dateIso) return false;
+    if(b.status!=='pending' && b.status!=='confirmed') return false;
+    var s=svc(b.serviceId); var bd=s?s.dur:60;
+    var bs=toMin(b.time);
+    return startMin < bs+bd && bs < startMin+dur;
+  });
+}
+function daySlots(masterId, dateIso, serviceId){
+  var s=svc(serviceId); if(!s||!masterId) return [];
+  var m=mst(masterId); if(!m||!m.active||!m.accepting) return [];
+  var d=new Date(dateIso+'T00:00:00');
+  if(state.business.daysOff.indexOf(d.getDay())>=0) return [];
+  var from=toMin(state.business.workFrom), to=toMin(state.business.workTo), step=state.rules.step;
+  var out=[];
+  var now=new Date(); var isToday = dateIso===isoOf(now);
+  var minStart = isToday ? now.getHours()*60+now.getMinutes()+state.rules.leadHours*60 : 0;
+  for(var t=from; t+s.dur<=to; t+=step){
+    out.push({ time: toTime(t), busy: slotBlocked(masterId,dateIso,t,s.dur) || (isToday && t<minStart) });
+  }
+  return out;
+}
+</script>
+<script>
+/* ==================== NAVIGATION ==================== */
+function showView(v){
+  document.querySelectorAll('.view').forEach(function(el){ el.classList.remove('active'); });
+  $('view-'+v).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.view===v); });
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(v==='master') renderMasterCabinet();
+  if(v==='admin') renderAdmin();
+  updateBadge();
+}
+document.querySelectorAll('.nav-btn').forEach(function(b){ b.addEventListener('click', function(){ showView(b.dataset.view); }); });
+function updateBadge(){
+  var n = state.bookings.filter(function(b){ return b.status==='pending'; }).length;
+  var bd = $('masterBadge'); bd.style.display = n? 'flex':'none'; bd.textContent = n;
+}
+
+/* ==================== CLIENT: RENDER ==================== */
+var bk = { serviceId:null, masterId:null, date:null, time:null };
+function renderBusiness(){
+  var b=state.business;
+  $('brandName').textContent=b.name;
+  document.title=b.name+' — онлайн-запись';
+  $('heroTitle').innerHTML=esc(b.name)+' — <span class="hl">запись онлайн</span> за минуту';
+  $('heroLead').textContent=b.desc;
+  $('chipAddress').textContent=b.address;
+  $('chipHours').textContent=hoursLabel();
+  $('chipPhone').textContent=b.phone;
+  $('footName').textContent=b.name;
+  $('footDesc').textContent=b.tagline;
+  $('footAddress').textContent=b.address;
+  $('footPhone').textContent=b.phone;
+  $('footHours').textContent=hoursLabel();
+  $('footTg').href=b.tg||'#'; $('footVk').href=b.vk||'#';
+}
+function renderClient(){
+  renderBusiness();
+  /* services picker */
+  $('svcGrid').innerHTML = state.services.map(function(s){
+    return '<button class="svc'+(bk.serviceId===s.id?' sel':'')+'" onclick="pickService(\''+s.id+'\')"><span class="svc-name">'+esc(s.name)+'<span class="svc-price">'+money(s.price)+'</span></span><span class="svc-meta">'+esc(s.cat)+' · '+s.dur+' мин</span></button>';
+  }).join('');
+  /* price list */
+  $('priceList').innerHTML = state.services.map(function(s){
+    return '<div class="price-row"><div class="grow"><div class="nm">'+esc(s.name)+'</div><div class="ds">'+esc(s.desc)+'</div></div><span class="dur">'+s.dur+' мин</span><span class="pr">'+money(s.price)+'</span><button class="btn small ghost" onclick="bookService(\''+s.id+'\')">Записаться</button></div>';
+  }).join('');
+  renderMasterPicker();
+  renderDates();
+  renderPublicMasters();
+  updateSteps();
+}
+function mastersForService(){
+  if(!bk.serviceId) return state.masters.filter(function(m){return m.active;});
+  return state.masters.filter(function(m){ return m.active && m.services.indexOf(bk.serviceId)>=0; });
+}
+function renderMasterPicker(){
+  var list = mastersForService();
+  var html = '<button class="mcard'+(bk.masterId==='any'?' sel':'')+'" onclick="pickMaster(\'any\')"><span class="avatar">✦</span><span><span class="mcard-name">Любой свободный мастер</span><br><span class="mcard-role">Подберём по времени — подтвердит назначенный мастер</span></span></button>';
+  html += list.map(function(m){
+    return '<button class="mcard'+(bk.masterId===m.id?' sel':'')+(m.accepting?'':' off')+'" onclick="pickMaster(\''+m.id+'\')"><span class="avatar">'+initials(m.name)+'</span><span><span class="mcard-name">'+esc(m.name)+'</span><br><span class="mcard-role">'+esc(m.role)+'</span><br><span class="mcard-rate">★ '+esc(m.rating)+(m.accepting?'':' · не принимает записи')+'</span></span></button>';
+  }).join('');
+  $('masterRow').innerHTML = html;
+  $('masterHint').textContent = bk.serviceId ? ('Услугу «'+svc(bk.serviceId).name+'» оказывают: '+(list.length? list.map(function(m){return m.name;}).join(', ') : 'никто из активных мастеров — выберите другую услугу')) : 'Сначала выберите услугу — покажем мастеров, которые её оказывают.';
+}
+function renderPublicMasters(){
+  $('mastersPublic').innerHTML = state.masters.filter(function(m){return m.active;}).map(function(m){
+    var tags = m.services.map(function(id){ var s=svc(id); return s? '<span class="tag">'+esc(s.name)+'</span>':''; }).join('');
+    return '<div class="master-public"><span class="avatar">'+initials(m.name)+'</span><h3>'+esc(m.name)+'</h3><div class="role">'+esc(m.role)+' · '+esc(m.exp)+'</div><p class="bio">'+esc(m.bio)+'</p><div class="tag-row">'+tags+'</div><button class="btn small" onclick="bookWithMaster(\''+m.id+'\')">Записаться к мастеру</button></div>';
+  }).join('') || '<div class="empty"><div class="big">Мастера пока не добавлены</div>Администратор добавит их в панели управления.</div>';
+}
+function renderDates(){
+  var html='';
+  for(var i=0;i<state.rules.horizon;i++){
+    var d=dOffset(i,'0:00'); var iso=isoOf(d);
+    var off = state.business.daysOff.indexOf(d.getDay())>=0;
+    if(!bk.date && !off && i>=0 && bk.date===null && i===firstOpenOffset()) bk.date=iso;
+    html += '<button class="date-btn'+(bk.date===iso?' sel':'')+(off?' off':'')+'" onclick="pickDate(\''+iso+'\')"><div class="dow">'+DOWS[d.getDay()]+'</div><div class="dnum">'+d.getDate()+'</div><div class="dmon">'+MONTHS_S[d.getMonth()]+'</div></button>';
+  }
+  $('dateStrip').innerHTML=html;
+  renderSlots();
+}
+function firstOpenOffset(){ for(var i=0;i<state.rules.horizon;i++){ if(state.business.daysOff.indexOf(dOffset(i,'0:00').getDay())<0) return i; } return 0; }
+function effectiveMaster(){
+  if(bk.masterId && bk.masterId!=='any') return bk.masterId;
+  if(bk.masterId==='any' && bk.serviceId && bk.date){
+    var cands = mastersForService();
+    for(var i=0;i<cands.length;i++){ var sl=daySlots(cands[i].id, bk.date, bk.serviceId); if(sl.some(function(x){return !x.busy && (!bk.time || x.time===bk.time);})) return cands[i].id; }
+    return cands.length? cands[0].id : null;
+  }
+  return null;
+}
+function renderSlots(){
+  var grid=$('slotGrid');
+  if(!bk.serviceId){ grid.innerHTML='<div class="slot-empty">Сначала выберите услугу и мастера — покажем свободные окошки.</div>'; updateSummary(); return; }
+  if(!bk.masterId){ grid.innerHTML='<div class="slot-empty">Выберите мастера (или «Любой свободный») — покажем его расписание.</div>'; updateSummary(); return; }
+  var mid = effectiveMaster();
+  if(!mid){ grid.innerHTML='<div class="slot-empty">Нет мастеров для этой услуги.</div>'; updateSummary(); return; }
+  var slots = daySlots(mid, bk.date, bk.serviceId);
+  if(!slots.length){ grid.innerHTML='<div class="slot-empty">В этот день салон не работает или мастер не принимает. Выберите другую дату.</div>'; }
+  else{
+    grid.innerHTML = slots.map(function(s){ return '<button class="slot'+(s.busy?' busy':'')+(bk.time===s.time?' sel':'')+'" onclick="pickTime(\''+s.time+'\')">'+s.time+'</button>'; }).join('');
+    if(bk.time && slots.every(function(s){return s.time!==bk.time || s.busy;})) bk.time=null;
+  }
+  updateSummary();
+}
+function updateSteps(){
+  var p1=$('pill1'),p2=$('pill2'),p3=$('pill3'),p4=$('pill4');
+  [p1,p2,p3,p4].forEach(function(p){p.classList.remove('on','done');});
+  if(bk.serviceId) p1.classList.add('done');
+  if(bk.masterId) p2.classList.add('done');
+  if(bk.date&&bk.time) p3.classList.add('done');
+  var cur = !bk.serviceId? p1 : !bk.masterId? p2 : !(bk.date&&bk.time)? p3 : p4;
+  cur.classList.add('on');
+  updateSummary();
+}
+function updateSummary(){
+  var el=$('bookSummary'); if(!el) return;
+  if(!bk.serviceId){ el.innerHTML='Выберите услугу, мастера, дату и время — здесь появится итог записи.'; return; }
+  var s=svc(bk.serviceId); var mid=effectiveMaster(); var m=mid? mst(mid):null;
+  var mName = bk.masterId==='any' ? (m? 'любой свободный ('+esc(m.name)+')' : 'любой свободный') : (m? esc(m.name):'не выбран');
+  el.innerHTML='Услуга: <b>'+esc(s.name)+'</b> · '+money(s.price)+' · '+s.dur+' мин<br>Мастер: <b>'+mName+'</b><br>Когда: <b>'+(bk.date? fmtDate(bk.date):'дата не выбрана')+(bk.time? ' в '+bk.time : ', время не выбрано')+'</b><br>Статус после отправки: <b>ожидает подтверждения мастера</b>';
+}
+function pickService(id){ bk.serviceId=id; if(bk.masterId && bk.masterId!=='any'){ var m=mst(bk.masterId); if(!m || m.services.indexOf(id)<0) bk.masterId=null; } bk.time=null; renderClient(); }
+function bookService(id){ pickService(id); document.getElementById('booking').scrollIntoView({behavior:'smooth'}); }
+function bookWithMaster(mid){ bk.masterId=mid; var m=mst(mid); if(m && m.services.length && (!bk.serviceId || m.services.indexOf(bk.serviceId)<0)) bk.serviceId=m.services[0]; bk.time=null; renderClient(); document.getElementById('booking').scrollIntoView({behavior:'smooth'}); }
+function pickMaster(id){ bk.masterId=id; bk.time=null; renderMasterPicker(); renderSlots(); updateSteps(); }
+function pickDate(iso){ bk.date=iso; bk.time=null; renderDates(); updateSteps(); }
+function pickTime(t){ bk.time=t; renderSlots(); updateSteps(); }
+function resetBooking(){ bk={serviceId:null,masterId:null,date:null,time:null}; $('bookSuccess').style.display='none'; $('bookForm').style.display='block'; $('cName').value=''; $('cPhone').value=''; $('cComment').value=''; renderClient(); }
+
+$('submitBooking').addEventListener('click', function(){
+  var err=$('bookErr'); err.style.display='none';
+  function fail(msg){ err.textContent=msg; err.style.display='block'; err.scrollIntoView({behavior:'smooth',block:'center'}); }
+  if(!bk.serviceId) return fail('Выберите услугу — это шаг 1.');
+  if(!bk.masterId) return fail('Выберите мастера — это шаг 2.');
+  if(!bk.date || !bk.time) return fail('Выберите дату и свободное время — это шаг 3.');
+  var name=$('cName').value.trim();
+  var phone=$('cPhone').value.trim();
+  if(name.length<2) return fail('Укажите ваше имя, чтобы мастер знал, кто записан.');
+  if(digits(phone).length<10) return fail('Проверьте номер телефона: нужно не меньше 10 цифр. По нему вы найдёте запись и получите подтверждение.');
+  var mid=effectiveMaster();
+  if(!mid) return fail('Не удалось подобрать мастера на это время. Выберите другое время или мастера.');
+  if(slotBlocked(mid, bk.date, toMin(bk.time), svc(bk.serviceId).dur)) return fail('Это время только что заняли. Выберите другое окошко.');
+  state.seq++;
+  var b={ id:'BK-'+state.seq, client:name, phone:phone, serviceId:bk.serviceId, masterId:mid, date:bk.date, time:bk.time, comment:$('cComment').value.trim(), status:'pending', created:'только что', note:'' };
+  state.bookings.unshift(b);
+  $('bookForm').style.display='none';
+  $('bookSuccess').style.display='block';
+  $('successText').innerHTML='Здравствуйте, '+esc(name)+'! Ваша заявка: <b>'+esc(svc(b.serviceId).name)+'</b> к мастеру <b>'+esc(mst(mid).name)+'</b>, '+fmtDate(b.date)+' в '+b.time+'.';
+  $('successCode').textContent='Номер записи: '+b.id;
+  $('myPhone').value=phone;
+  updateBadge();
+  toast('Заявка <span class="t-orange">'+b.id+'</span> отправлена мастеру '+esc(mst(mid).name)+' на подтверждение');
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+});
+
+/* ==================== MY BOOKINGS ==================== */
+function bookingCard(b, mode){
+  var s=svc(b.serviceId), m=mst(b.masterId);
+  var html='<div class="bk"><div class="bk-head"><div class="bk-main"><div class="bk-title">'+esc(s? s.name:'Услуга удалена')+' — '+money(s? s.price:0)+'</div>'
+    +'<div class="bk-sub">'+fmtDate(b.date)+' · '+b.time+' · '+(s? s.dur:0)+' мин</div>'
+    +'<div class="bk-sub">Мастер: <b>'+esc(m? m.name:'—')+'</b> · Клиент: '+esc(b.client)+' · '+esc(b.phone)+'</div>'
+    +'<div class="bk-sub">Запись '+b.id+' · создана: '+esc(b.created)+'</div></div>'+stChip(b.status)+'</div>';
+  if(b.comment) html+='<div class="bk-note"><b>Комментарий клиента:</b> '+esc(b.comment)+'</div>';
+  if(b.note) html+='<div class="bk-note"><b>Ответ мастера:</b> '+esc(b.note)+'</div>';
+  if(mode==='client' && (b.status==='pending'||b.status==='confirmed')){
+    html+='<div class="bk-actions"><button class="btn small danger" onclick="cancelBooking(\''+b.id+'\',\'client\')">Отменить запись</button></div>';
+  }
+  if(mode==='admin' && (b.status==='pending'||b.status==='confirmed')){
+    html+='<div class="bk-actions"><span class="small-note">Подтверждение — только у мастера '+(m? esc(m.name):'')+' в его кабинете.</span><button class="btn small danger" onclick="cancelBooking(\''+b.id+'\',\'admin\')">Отменить</button></div>';
+  }
+  if(mode==='master'){
+    if(b.status==='pending'){
+      html+='<div class="bk-actions"><button class="btn small ok" onclick="masterConfirm(\''+b.id+'\')">✓ Подтвердить запись</button>'
+        +'<button class="btn small danger" onclick="toggleReject(\''+b.id+'\')">Отклонить</button></div>'
+        +'<div class="reject-row" id="rej-'+b.id+'"><select id="rejReason-'+b.id+'"><option>Не смогу в это время</option><option>В этот день не работаю</option><option>Нужно больше времени на услугу</option><option>Другая причина</option></select><button class="btn small danger" onclick="masterReject(\''+b.id+'\')">Отправить отказ</button></div>';
+    }
+    if(b.status==='confirmed'){
+      html+='<div class="bk-actions"><button class="btn small ghost" onclick="masterComplete(\''+b.id+'\')">Завершить (клиент обслужен)</button><button class="btn small danger" onclick="toggleReject(\''+b.id+'\')">Отменить у себя</button></div>'
+        +'<div class="reject-row" id="rej-'+b.id+'"><select id="rejReason-'+b.id+'"><option>Не смогу в это время</option><option>Заболел(а)</option><option>Другая причина</option></select><button class="btn small danger" onclick="masterReject(\''+b.id+'\')">Подтвердить отмену</button></div>';
+    }
+  }
+  return html+'</div>';
+}
+function findMyBookings(){
+  var p=digits($('myPhone').value);
+  var box=$('myResults');
+  if(p.length<10){ box.innerHTML='<div class="empty"><div class="big">Введите телефон полностью</div>Нужен тот же номер, что вы указывали при записи.</div>'; return; }
+  var list=state.bookings.filter(function(b){ return digits(b.phone)===p || digits(b.phone).endsWith(p.slice(-10)); });
+  if(!list.length){ box.innerHTML='<div class="empty"><div class="big">Записей по этому номеру нет</div>Проверьте номер или запишитесь на главной странице.</div>'; return; }
+  box.innerHTML='<p class="small-note" style="margin-bottom:12px">Найдено записей: '+list.length+'. Статусы обновляются, как только мастер отвечает на заявку.</p>'+list.map(function(b){return bookingCard(b,'client');}).join('');
+}
+function cancelBooking(id, who){
+  var b=state.bookings.find(function(x){return x.id===id;}); if(!b) return;
+  b.status='cancelled'; b.note = who==='client' ? 'Отменено клиентом' : 'Отменено администратором';
+  toast('Запись '+id+' отменена');
+  refreshAll();
+  if(who==='client') findMyBookings();
+}
+
+/* ==================== MASTER CABINET ==================== */
+var currentMaster = state.masters.length? state.masters[0].id : null;
+function renderMasterCabinet(){
+  var pick=$('masterPicker');
+  pick.innerHTML = state.masters.filter(function(m){return m.active;}).map(function(m){
+    var pend=state.bookings.filter(function(b){return b.masterId===m.id && b.status==='pending';}).length;
+    return '<button class="picker-btn'+(currentMaster===m.id?' sel':'')+'" onclick="selectMaster(\''+m.id+'\')"><span class="avatar">'+initials(m.name)+'</span>'+esc(m.name)+(pend? '<span class="cnt">'+pend+'</span>':'')+'</button>';
+  }).join('');
+  var box=$('masterCabinet');
+  var m=mst(currentMaster);
+  if(!m){ box.innerHTML='<div class="empty"><div class="big">Нет активных мастеров</div>Администратор добавит мастеров в панели управления.</div>'; return; }
+  var mine=state.bookings.filter(function(b){return b.masterId===m.id;});
+  var pend=mine.filter(function(b){return b.status==='pending';});
+  var conf=mine.filter(function(b){return b.status==='confirmed';}).sort(function(a,b){return (a.date+a.time)<(b.date+b.time)?-1:1;});
+  var hist=mine.filter(function(b){return ['completed','rejected','cancelled'].indexOf(b.status)>=0;});
+  var html='<div class="profile-card"><span class="avatar">'+initials(m.name)+'</span><div style="flex:1;min-width:200px"><div style="font-weight:800;font-size:18px">'+esc(m.name)+'</div><div class="bk-sub">'+esc(m.role)+' · '+esc(m.exp)+' · ★ '+esc(m.rating)+'</div><div class="bk-sub">Услуги: '+m.services.map(function(id){var s=svc(id);return s? esc(s.name):'';}).filter(Boolean).join(', ')+'</div></div>'
+    +'<div><div class="switch-row"><button class="switch'+(m.accepting?' on':'')+'" onclick="toggleAccepting(\''+m.id+'\')" aria-label="Принимаю записи"></button>'+(m.accepting?'Принимаю записи':'Записи приостановлены')+'</div><div class="small-note">Выключено — клиенты не смогут выбрать вас, пока не включите обратно</div></div></div>';
+  html+='<div class="cols"><div><div class="col-head"><h3>Требуют вашего подтверждения</h3><span class="cnt">'+pend.length+'</span></div>'
+    +(pend.length? pend.map(function(b){return bookingCard(b,'master');}).join('') : '<div class="empty"><div class="big">Новых заявок нет</div>Как только клиент запишется к вам, заявка появится здесь.</div>')
+    +'</div><div><div class="col-head"><h3>Ваше расписание</h3></div>'
+    +(conf.length? conf.map(function(b){return bookingCard(b,'master');}).join('') : '<div class="empty"><div class="big">Подтверждённых записей пока нет</div>Подтвердите заявку слева — она появится в расписании.</div>')
+    +'</div></div>';
+  if(hist.length) html+='<div class="col-head" style="margin-top:22px"><h3>История</h3></div>'+hist.map(function(b){return bookingCard(b,'master');}).join('');
+  box.innerHTML=html;
+  updateBadge();
+}
+function selectMaster(id){ currentMaster=id; renderMasterCabinet(); }
+function toggleAccepting(id){ var m=mst(id); m.accepting=!m.accepting; toast(m.accepting? esc(m.name)+': приём записей включён' : esc(m.name)+': приём записей приостановлен'); renderMasterCabinet(); renderClient(); }
+function toggleReject(id){ var r=$('rej-'+id); if(r) r.classList.toggle('open'); }
+function masterConfirm(id){
+  var b=state.bookings.find(function(x){return x.id===id;}); if(!b) return;
+  b.status='confirmed'; b.note='Подтверждено мастером. Ждём вас в салоне за 5 минут до начала.';
+  toast('Запись '+id+' <span class="t-orange">подтверждена</span> — клиент увидит новый статус');
+  refreshAll();
+}
+function masterReject(id){
+  var b=state.bookings.find(function(x){return x.id===id;}); if(!b) return;
+  var sel=$('rejReason-'+id); var reason=sel? sel.value:'Не смогу в это время';
+  b.status = b.status==='confirmed' ? 'cancelled' : 'rejected';
+  b.note='Мастер: '+reason+'. Позвоните в салон — подберём другое время.';
+  toast('Запись '+id+' отклонена, клиент увидит причину');
+  refreshAll();
+}
+function masterComplete(id){
+  var b=state.bookings.find(function(x){return x.id===id;}); if(!b) return;
+  b.status='completed'; toast('Запись '+id+' завершена'); refreshAll();
+}
+function refreshAll(){ renderClient(); renderMasterCabinet(); renderAdmin(); updateBadge(); if($('view-my').classList.contains('active') && digits($('myPhone').value).length>=10) findMyBookings(); }
+
+/* ==================== ADMIN ==================== */
+var adminFilter='all', editMasterId=null, editServiceId=null, masterSvcSel=[];
+document.querySelectorAll('#adminNav button').forEach(function(b){ b.addEventListener('click', function(){
+  document.querySelectorAll('#adminNav button').forEach(function(x){x.classList.remove('sel');});
+  b.classList.add('sel');
+  document.querySelectorAll('.admin-page').forEach(function(p){p.classList.remove('active');});
+  $('apage-'+b.dataset.apage).classList.add('active');
+});});
+document.querySelectorAll('#bkFilters button').forEach(function(b){ b.addEventListener('click', function(){
+  document.querySelectorAll('#bkFilters button').forEach(function(x){x.classList.remove('sel');});
+  b.classList.add('sel'); adminFilter=b.dataset.f; renderAdminBookings();
+});});
+
+function renderAdmin(){ renderDash(); fillBusinessForm(); renderAdminMasters(); renderAdminServices(); renderAdminBookings(); fillRulesForm(); }
+function renderDash(){
+  var pend=state.bookings.filter(function(b){return b.status==='pending';});
+  var conf=state.bookings.filter(function(b){return b.status==='confirmed';});
+  var revenue=state.bookings.filter(function(b){return b.status==='confirmed'||b.status==='completed';}).reduce(function(sum,b){var s=svc(b.serviceId);return sum+(s? s.price:0);},0);
+  $('dashStats').innerHTML =
+    '<div class="stat accent"><div class="v">'+pend.length+'</div><div class="l">ждут подтверждения мастеров</div></div>'
+    +'<div class="stat"><div class="v">'+conf.length+'</div><div class="l">подтверждено впереди</div></div>'
+    +'<div class="stat"><div class="v">'+state.bookings.length+'</div><div class="l">всего записей</div></div>'
+    +'<div class="stat"><div class="v">'+state.masters.filter(function(m){return m.active;}).length+'</div><div class="l">мастеров на сайте</div></div>'
+    +'<div class="stat"><div class="v">'+state.services.length+'</div><div class="l">услуг в прайсе</div></div>'
+    +'<div class="stat"><div class="v">'+money(revenue)+'</div><div class="l">сумма подтверждённых визитов</div></div>';
+  $('dashPendingCnt').textContent=pend.length;
+  $('dashPending').innerHTML = pend.length? pend.map(function(b){return bookingCard(b,'admin');}).join('') : '<div class="empty"><div class="big">Всё разобрано</div>Новых заявок, ждущих мастеров, нет.</div>';
+  var up=conf.slice().sort(function(a,b){return (a.date+a.time)<(b.date+b.time)?-1:1;});
+  $('dashUpcoming').innerHTML = up.length? up.map(function(b){return bookingCard(b,'admin');}).join('') : '<div class="empty"><div class="big">Подтверждённых записей нет</div>Они появятся, когда мастера подтвердят заявки.</div>';
+}
+function fillBusinessForm(){
+  var b=state.business;
+  $('bName').value=b.name; $('bTagline').value=b.tagline; $('bDesc').value=b.desc;
+  $('bAddress').value=b.address; $('bPhone').value=b.phone; $('bTg').value=b.tg; $('bVk').value=b.vk;
+  $('bFrom').value=b.workFrom; $('bTo').value=b.workTo;
+  var names=['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+  var order=[1,2,3,4,5,6,0];
+  $('bDaysOff').innerHTML = order.map(function(d){ return '<button type="button" class="pill-toggle'+(b.daysOff.indexOf(d)>=0?' sel':'')+'" onclick="toggleDayOff('+d+')">'+names[d]+'</button>'; }).join('') + '<div class="hint" style="font-size:12px;color:var(--muted)">Нажатые дни — выходные: запись в них закрыта</div>';
+}
+function toggleDayOff(d){ var b=state.business; var i=b.daysOff.indexOf(d); if(i>=0) b.daysOff.splice(i,1); else b.daysOff.push(d); fillBusinessForm(); }
+function saveBusiness(){
+  var b=state.business;
+  b.name=$('bName').value.trim()||b.name; b.tagline=$('bTagline').value.trim(); b.desc=$('bDesc').value.trim();
+  b.address=$('bAddress').value.trim(); b.phone=$('bPhone').value.trim(); b.tg=$('bTg').value.trim(); b.vk=$('bVk').value.trim();
+  if($('bFrom').value) b.workFrom=$('bFrom').value;
+  if($('bTo').value) b.workTo=$('bTo').value;
+  bk.date=null; bk.time=null;
+  renderClient(); toast('Настройки бизнеса сохранены — сайт обновлён');
+}
+function fillRulesForm(){ $('rStep').value=String(state.rules.step); $('rHorizon').value=String(state.rules.horizon); $('rLead').value=String(state.rules.leadHours); $('rRemind').value=String(state.rules.remind); }
+function saveRules(){
+  state.rules.step=+$('rStep').value; state.rules.horizon=+$('rHorizon').value; state.rules.leadHours=+$('rLead').value; state.rules.remind=+$('rRemind').value;
+  bk.date=null; bk.time=null; renderClient(); toast('Правила записи сохранены');
+}
+
+/* --- masters CRUD --- */
+function renderMasterSvcPills(){
+  $('mServices').innerHTML = state.services.map(function(s){
+    return '<button type="button" class="pill-toggle'+(masterSvcSel.indexOf(s.id)>=0?' sel':'')+'" onclick="toggleMasterSvc(\''+s.id+'\')">'+esc(s.name)+'</button>';
+  }).join('') || '<span class="small-note">Сначала добавьте услуги во вкладке «Услуги»</span>';
+}
+function toggleMasterSvc(id){ var i=masterSvcSel.indexOf(id); if(i>=0) masterSvcSel.splice(i,1); else masterSvcSel.push(id); renderMasterSvcPills(); }
+function renderAdminMasters(){
+  renderMasterSvcPills();
+  $('adminMasters').innerHTML = state.masters.map(function(m){
+    var pend=state.bookings.filter(function(b){return b.masterId===m.id && b.status==='pending';}).length;
+    return '<div class="row-item"><span class="avatar">'+initials(m.name)+'</span><div class="grow"><div style="font-weight:800">'+esc(m.name)+(m.active?'':' <span class="st st-cancelled">отключён</span>')+'</div><div class="bk-sub">'+esc(m.role)+' · '+esc(m.exp)+' · услуг: '+m.services.length+(pend? ' · <b style="color:var(--wait)">ждёт подтверждения: '+pend+'</b>':'')+'</div></div>'
+      +'<button class="icon-btn" onclick="editMaster(\''+m.id+'\')">Изменить</button>'
+      +'<button class="icon-btn" onclick="toggleMasterActive(\''+m.id+'\')">'+(m.active?'Отключить':'Включить')+'</button>'
+      +'<button class="icon-btn del" onclick="deleteMaster(\''+m.id+'\')">Удалить</button></div>';
+  }).join('') || '<div class="empty"><div class="big">Мастеров нет</div>Добавьте первого мастера формой выше.</div>';
+}
+function saveMaster(){
+  var err=$('masterErr'); err.style.display='none';
+  var name=$('mName').value.trim(), role=$('mRole').value.trim();
+  if(name.length<3){ err.textContent='Укажите имя и фамилию мастера.'; err.style.display='block'; return; }
+  if(role.length<2){ err.textContent='Укажите специализацию мастера.'; err.style.display='block'; return; }
+  if(!masterSvcSel.length){ err.textContent='Отметьте хотя бы одну услугу, которую оказывает мастер.'; err.style.display='block'; return; }
+  if(editMasterId){
+    var m=mst(editMasterId); m.name=name; m.role=role; m.exp=$('mExp').value.trim()||'—'; m.rating=$('mRating').value.trim()||'5,0'; m.bio=$('mBio').value.trim(); m.services=masterSvcSel.slice();
+    toast('Мастер '+esc(name)+' обновлён');
+  } else {
+    var nm={ id:'m'+Date.now(), name:name, role:role, exp:$('mExp').value.trim()||'—', rating:$('mRating').value.trim()||'5,0', bio:$('mBio').value.trim(), services:masterSvcSel.slice(), active:true, accepting:true };
+    state.masters.push(nm); currentMaster=nm.id;
+    toast('Мастер <span class="t-orange">'+esc(name)+'</span> добавлен на сайт');
+  }
+  cancelEditMaster(); refreshAll();
+}
+function editMaster(id){
+  var m=mst(id); if(!m) return;
+  editMasterId=id; masterSvcSel=m.services.slice();
+  $('mName').value=m.name; $('mRole').value=m.role; $('mExp').value=m.exp; $('mRating').value=m.rating; $('mBio').value=m.bio;
+  $('masterFormTitle').textContent='Редактировать мастера'; $('masterSaveBtn').textContent='Сохранить изменения'; $('masterCancelBtn').style.display='inline-flex';
+  renderMasterSvcPills(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function cancelEditMaster(){
+  editMasterId=null; masterSvcSel=[];
+  ['mName','mRole','mExp','mRating','mBio'].forEach(function(id){ $(id).value=''; });
+  $('masterFormTitle').textContent='Добавить мастера'; $('masterSaveBtn').textContent='Добавить мастера'; $('masterCancelBtn').style.display='none';
+  renderMasterSvcPills();
+}
+function toggleMasterActive(id){ var m=mst(id); m.active=!m.active; if(!m.active && currentMaster===id){ var f=state.masters.find(function(x){return x.active;}); currentMaster=f? f.id:null; } toast(esc(m.name)+(m.active?': снова на сайте':' отключён и скрыт от клиентов')); refreshAll(); }
+function deleteMaster(id){
+  var m=mst(id); if(!m) return;
+  var future=state.bookings.filter(function(b){return b.masterId===id && b.status==='pending';});
+  future.forEach(function(b){ b.status='cancelled'; b.note='Мастер больше не работает в салоне. Позвоните нам — предложим другого специалиста.'; });
+  state.masters=state.masters.filter(function(x){return x.id!==id;});
+  state.bookings.forEach(function(b){ if(b.masterId===id && b.status==='confirmed'){ /* подтверждённые сохраняем в истории */ } });
+  if(currentMaster===id){ var f=state.masters[0]; currentMaster=f? f.id:null; }
+  if(bk.masterId===id) bk.masterId=null;
+  toast('Мастер '+esc(m.name)+' удалён'+(future.length? ', его неподтверждённые записи ('+future.length+') отменены':''));
+  cancelEditMaster(); refreshAll();
+}
+
+/* --- services CRUD --- */
+function renderAdminServices(){
+  $('adminServices').innerHTML = state.services.map(function(s){
+    var used=state.masters.filter(function(m){return m.services.indexOf(s.id)>=0;}).length;
+    return '<div class="row-item"><div class="grow"><div style="font-weight:800">'+esc(s.name)+' · '+money(s.price)+'</div><div class="bk-sub">'+esc(s.cat)+' · '+s.dur+' мин · оказывают мастеров: '+used+' · '+esc(s.desc)+'</div></div>'
+      +'<button class="icon-btn" onclick="editService(\''+s.id+'\')">Изменить</button>'
+      +'<button class="icon-btn del" onclick="deleteService(\''+s.id+'\')">Удалить</button></div>';
+  }).join('') || '<div class="empty"><div class="big">Услуг нет</div>Добавьте первую услугу формой выше.</div>';
+}
+function saveService(){
+  var err=$('svcErr'); err.style.display='none';
+  var name=$('sName').value.trim(); var dur=parseInt($('sDur').value,10); var price=parseInt($('sPrice').value,10);
+  if(name.length<2){ err.textContent='Укажите название услуги.'; err.style.display='block'; return; }
+  if(!dur || dur<10){ err.textContent='Длительность — не меньше 10 минут.'; err.style.display='block'; return; }
+  if(isNaN(price) || price<0){ err.textContent='Укажите цену (0 — если бесплатно).'; err.style.display='block'; return; }
+  if(editServiceId){
+    var s=svc(editServiceId); s.name=name; s.cat=$('sCat').value.trim()||'Услуги'; s.dur=dur; s.price=price; s.desc=$('sDesc').value.trim();
+    toast('Услуга «'+esc(name)+'» обновлена');
+  } else {
+    state.services.push({ id:'s'+Date.now(), name:name, cat:$('sCat').value.trim()||'Услуги', dur:dur, price:price, desc:$('sDesc').value.trim() });
+    toast('Услуга «'+esc(name)+'» добавлена в прайс');
+  }
+  cancelEditService(); refreshAll();
+}
+function editService(id){
+  var s=svc(id); if(!s) return;
+  editServiceId=id;
+  $('sName').value=s.name; $('sCat').value=s.cat; $('sDur').value=s.dur; $('sPrice').value=s.price; $('sDesc').value=s.desc;
+  $('svcFormTitle').textContent='Редактировать услугу'; $('svcSaveBtn').textContent='Сохранить изменения'; $('svcCancelBtn').style.display='inline-flex';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function cancelEditService(){
+  editServiceId=null;
+  ['sName','sCat','sDur','sPrice','sDesc'].forEach(function(id){ $(id).value=''; });
+  $('svcFormTitle').textContent='Добавить услугу'; $('svcSaveBtn').textContent='Добавить услугу'; $('svcCancelBtn').style.display='none';
+}
+function deleteService(id){
+  var s=svc(id); if(!s) return;
+  state.services=state.services.filter(function(x){return x.id!==id;});
+  state.masters.forEach(function(m){ m.services=m.services.filter(function(x){return x!==id;}); });
+  if(bk.serviceId===id){ bk.serviceId=null; bk.time=null; }
+  toast('Услуга «'+esc(s.name)+'» удалена из прайса и у всех мастеров');
+  cancelEditService(); refreshAll();
+}
+
+/* --- admin bookings --- */
+function renderAdminBookings(){
+  var list=state.bookings.filter(function(b){ return adminFilter==='all' || b.status===adminFilter; });
+  $('adminBookings').innerHTML = list.length? list.map(function(b){return bookingCard(b,'admin');}).join('') : '<div class="empty"><div class="big">Записей с таким статусом нет</div>Выберите другой фильтр.</div>';
+}
+
+/* ==================== INIT ==================== */
+renderClient();
+renderAdmin();
+updateBadge();
+</script>
+</body>
+</html>
